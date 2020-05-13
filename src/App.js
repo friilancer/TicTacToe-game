@@ -47,6 +47,11 @@ const [history, setHistory] = React.useState([{squares: Array(9).fill(null)}]);
 const [xIsNext, setXIsNext] = React.useState(true);
 const [stepNumber, setStepNumber] = React.useState(0);
 
+const grid = [
+  "col:1, row:1","col:2, row:1","col:3, row:1",
+  "col:1, row:2","col:2, row:2","col:3, row:2",
+  "col:1, row:3","col:2, row:3","col:3, row:3"
+]
 
 const handleClick = (i) => {
 let temp = history.slice(0, stepNumber + 1);
@@ -74,10 +79,14 @@ setXIsNext((step % 2) === 0);
 
 
 const moves =  history.map((step, move) => {
-const desc = move ? `Go to move #${move}` : `Go to game start`;       
+  let gridPosition;
+    history[move].squares.map((x, index)=>{
+      if(move!=0 && history[move-1].squares[index]!=x){gridPosition=index;}
+    });
+const desc = move ? `Go to move #${move} at ${grid[gridPosition]}`  : `Go to game start`;       
 return(
   <li key={move}>
-    <button onClick={() => jumpTo(move)}>{desc}</button>
+    <button move={move} className= onClick={() => jumpTo(move)}>{desc}</button>
   </li>
 );
 
@@ -93,7 +102,7 @@ const status = (winner) => {
     return `Next player: ${xIsNext ? `X` : `O`}`;
     }
 };
-status(winner);
+
 
 
 return (
