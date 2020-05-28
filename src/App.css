@@ -7,6 +7,19 @@ ol, ul {
   padding-left: 30px;
 }
 
+button{
+  padding: 5px 10px;
+  background: rgb(129, 129, 241);
+  border: 1px solid rgb(129, 129, 241);
+}
+
+.bold{
+  padding: 5px 10px;
+  font-weight: bold;
+  background: rgb(223, 87, 87);
+  border: 1px solid rgb(223, 87, 87);
+}
+
 .board-row:after {
   clear: both;
   content: "";
@@ -27,7 +40,7 @@ ol, ul {
   height: 34px;
   margin-right: -1px;
   margin-top: -1px;
-  padding: 0;
+  padding: 5;
   text-align: center;
   width: 34px;
 }

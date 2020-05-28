@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './App.css';
 
-const Square = (props) => {      
+const Square = (props) => {     
   return (
     <button className="square" onClick={props.onClick}>
       {props.value}
@@ -15,7 +15,9 @@ const renderSquare = (i) => {
 return (
   <Square 
   value={props.squares[i]} 
-  onClick={()=>props.onClick(i)} />
+  onClick={()=>props.onClick(i)}
+  className = {props.winner == '' ? '' : (props.winner.every(x => x==i)) ? 'bold' : '' }
+   />
 );
 }
 
@@ -76,32 +78,34 @@ setStepNumber(step);
 setXIsNext((step % 2) === 0);
 }
 
-
+const current = history[stepNumber];
+const winner = calculateWinner(current.squares);
+const status = (winner, arr) => {
+  let completed = arr.every(x => x!=null);
+  if(winner || completed) {
+    if(winner){
+      return `Winner ${winner.winner}`
+    }
+    return `Draw`
+  }
+  else {
+    return `Next player: ${xIsNext ? `X` : `O`}`;
+    }
+};
 
 const moves =  history.map((step, move) => {
   let gridPosition;
     history[move].squares.map((x, index)=>{
       if(move!=0 && history[move-1].squares[index]!=x){gridPosition=index;}
     });
-const desc = move ? `Go to move #${move} at ${grid[gridPosition]}`  : `Go to game start`;       
+const desc = move ? `Go to move #${move} at ${grid[gridPosition]}`  : `Go to game start`;     
 return(
   <li key={move}>
-    <button move={move} className= onClick={() => jumpTo(move)}>{desc}</button>
+    <button className={move == stepNumber ? 'bold' : ''} onClick={() => jumpTo(move)}>{desc}</button>
   </li>
 );
 
 }); 
-
-
-
-const current = history[stepNumber];
-const winner = calculateWinner(current.squares);
-const status = (winner) => {
-  if(winner) {return `Winner ${winner}`}
-  else {
-    return `Next player: ${xIsNext ? `X` : `O`}`;
-    }
-};
 
 
 
@@ -111,8 +115,8 @@ return (
       <Board 
       squares = {current.squares}
       onClick = {(i) => {handleClick(i)}}
-      status = {status(winner)}
-      />
+      status = {status(winner, current.squares)}
+      winner = {winner ? winner.collection : ''} />
     </div>
     <div className="game-info">
       <ol>{moves}</ol>
@@ -135,7 +139,10 @@ const lines = [
 for (let i = 0; i < lines.length; i++) {
 const [a, b, c] = lines[i];
 if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-  return squares[a];
+  return {
+    winner: squares[a],
+    collection: [a,b,c]
+  }
 }
 }
 return null;  
